@@ -1,13 +1,13 @@
 import React, { Fragment, useState } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import {chakra} from '@chakra-ui/react'
 
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/Signup";
-
-import "./App.css";
+import Navbar from "./components/Navbar/Navbar";
 
 const App = () => {
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(true);
   const [token, setToken] = useState(null);
   const [userId, setUserId] = useState(null);
   const [authLoading, setAuthLoading] = useState(false);
@@ -17,9 +17,15 @@ const App = () => {
   if (isAuth) {
     return (
       <Fragment>
+
+        <chakra.header>
+          <Navbar/>
+        </chakra.header>
+
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Navigate replace to="/login" />} />
+            <Route path="/home" exact />
+            <Route path="/" element={<Navigate replace to="/home" />} />
           </Routes>
         </BrowserRouter>
       </Fragment>
