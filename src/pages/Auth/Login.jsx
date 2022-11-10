@@ -11,6 +11,8 @@ import {
   Input,
   Stack,
   Text,
+  Alert,
+  AlertIcon,
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -19,13 +21,91 @@ import { useNavigate } from "react-router-dom";
 import { Logo } from "../../components/Image/Logo";
 import { PasswordField } from "../../components/Form/PasswordField";
 
-export const Login = () => {
-
+export const Login = ({ state, setState, setAutoLogout }) => {
   // useNavigate
   const navigate = useNavigate();
 
+  // useState
+  const [usernameInput, setUsernameInput] = React.useState("");
+  const [passwordInput, setPasswordInput] = React.useState("");
+  const [rememberMe, setRememberMe] = React.useState(false);
+  const [loginError, setLoginError] = React.useState("");
+
+  const usernameChangeHandler = (event) => {
+    setUsernameInput(event.target.value);
+  };
+
+  const passwordChangeHandler = (event) => {
+    setPasswordInput(event.target.value);
+  };
+
+  const rememberMeChangeHandler = (event) => {
+    setRememberMe(event.target.checked);
+  };
+
+  const signInOnSubmitHandler = async (event) => {
+    event.preventDefault();
+
+    setState({
+      ...state,
+      authLoading: true,
+    });
+
+    console.log(
+      JSON.stringify({
+        username: usernameInput,
+        password: passwordInput,
+      })
+    );
+
+    const res = await fetch("http://localhost:5000/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: usernameInput,
+        password: passwordInput,
+      }),
+    });
+
+    if (res.status === 422) {
+      setLoginError("Validation failed.");
+      throw new Error("Validation failed.");
+    }
+    if (res.status !== 200 && res.status !== 201) {
+      setLoginError("Could not authenticate you!");
+      throw new Error("Could not authenticate you!");
+    }
+
+    setLoginError("");
+
+    const resData = await res.json();
+
+    setState({
+      ...state,
+      isAuth: true,
+      token: resData.token,
+      authLoading: false,
+      userId: resData.userId,
+    });
+
+    localStorage.setItem("token", resData.token);
+    localStorage.setItem("userId", resData.userId);
+
+    const remainingMilliseconds = 60 * 60 * 1000;
+
+    const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+
+    localStorage.setItem("expiryDate", expiryDate.toISOString());
+
+    setAutoLogout(remainingMilliseconds);
+
+    navigate("/home");
+  };
+
   const signUpLinkHandler = () => {
-    navigate('/signup');
+    navigate("/signup");
   };
 
   return (
@@ -42,7 +122,10 @@ export const Login = () => {
     >
       <Stack spacing="8">
         <Stack spacing="6">
-          <Logo />
+          <HStack justify="center">
+            <Logo width="48px" height="48px" />
+          </HStack>
+          
           <Stack
             spacing={{
               base: "2",
@@ -60,7 +143,11 @@ export const Login = () => {
             </Heading>
             <HStack spacing="1" justify="center">
               <Text color="muted">Don't have an account?</Text>
-              <Button variant="link" colorScheme="blue" onClick={signUpLinkHandler}>
+              <Button
+                variant="link"
+                colorScheme="blue"
+                onClick={signUpLinkHandler}
+              >
                 Sign up
               </Button>
             </HStack>
@@ -91,19 +178,42 @@ export const Login = () => {
           <Stack spacing="6">
             <Stack spacing="5">
               <FormControl>
-                <FormLabel htmlFor="email">Email</FormLabel>
-                <Input id="email" type="email" />
+                <FormLabel htmlFor="username">Username</FormLabel>
+                <Input
+                  id="username"
+                  type="text"
+                  value={usernameInput}
+                  onChange={usernameChangeHandler}
+                />
               </FormControl>
-              <PasswordField title="Password" />
+              <PasswordField
+                title="Password"
+                value={passwordInput}
+                onChange={passwordChangeHandler}
+              />
             </Stack>
             <HStack justify="space-between">
-              <Checkbox defaultChecked>Remember me</Checkbox>
+              <Checkbox value={rememberMe} onChange={rememberMeChangeHandler}>
+                Remember me
+              </Checkbox>
               <Button variant="link" colorScheme="blue" size="sm">
                 Forgot password?
               </Button>
             </HStack>
+
+            {loginError && (
+              <Stack spacing="2">
+                <Alert status="error">
+                  <AlertIcon />
+                  {loginError}
+                </Alert>
+              </Stack>
+            )}
+
             <Stack spacing="6">
-              <Button variant="primary">Sign in</Button>
+              <Button variant="primary" onClick={signInOnSubmitHandler}>
+                Sign in
+              </Button>
             </Stack>
           </Stack>
         </Box>
