@@ -6,6 +6,7 @@ import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/Signup";
 import Navbar from "./components/Navbar/Navbar";
 import CreatePrescription from "./pages/Home/CreatePrescription";
+import Home from "./pages/Home/Home";
 
 const App = () => {
   const [state, setState] = useState({
@@ -61,62 +62,47 @@ const App = () => {
     }, milliseconds);
   };
 
-  if (state.isAuth) {
-    return (
-      <Fragment>
-        <chakra.header>
-          <Navbar logoutHandler={logoutHandler} />
-        </chakra.header>
-
-        <BrowserRouter>
-          <Routes>
-            <Route path="/home" exact />
-            <Route
-              path="/create-prescription"
-              exact
-              element={
-                <CreatePrescription
-                  state={state}
-                  setState={setState}
-                  setAutoLogout={setAutoLogout}
-                />
-              }
-            />
-            <Route path="*" element={<Navigate replace to="/home" />} />
-          </Routes>
-        </BrowserRouter>
-      </Fragment>
-    );
-  }
-
   return (
     <Fragment>
       <BrowserRouter>
-        <Routes>
-          <Route
-            path="/login"
-            exact
-            element={
-              <Login
-                state={state}
-                setState={setState}
-                setAutoLogout={setAutoLogout}
+        {state.isAuth ? (
+          <Fragment>
+            <chakra.header>
+              <Navbar logoutHandler={logoutHandler} />
+            </chakra.header>
+            <Routes>
+              <Route path="/home" element={<Home />} />
+              <Route path="/create" exact element={<CreatePrescription />} />
+            </Routes>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Routes>
+              <Route
+                path="/login"
+                exact
+                element={
+                  <Login
+                    state={state}
+                    setState={setState}
+                    setAutoLogout={setAutoLogout}
+                  />
+                }
               />
-            }
-          />
-          <Route
-            path="/signup"
-            exact
-            element={
-              <SignUp
-                state={state}
-                setState={setState}
-                setAutoLogout={setAutoLogout}
+              <Route
+                path="/signup"
+                exact
+                element={
+                  <SignUp
+                    state={state}
+                    setState={setState}
+                    setAutoLogout={setAutoLogout}
+                  />
+                }
               />
-            }
-          />
-          <Route path="*" element={<Navigate replace to="/login" />} />
-        </Routes>
+            </Routes>
+          </Fragment>
+        )}
       </BrowserRouter>
     </Fragment>
   );
