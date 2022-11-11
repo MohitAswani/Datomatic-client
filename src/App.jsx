@@ -5,6 +5,7 @@ import { chakra } from "@chakra-ui/react";
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/Signup";
 import Navbar from "./components/Navbar/Navbar";
+import CreatePrescription from "./pages/Home/CreatePrescription";
 
 const App = () => {
   const [state, setState] = useState({
@@ -70,6 +71,17 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/home" exact />
+            <Route
+              path="/create-prescription"
+              exact
+              element={
+                <CreatePrescription
+                  state={state}
+                  setState={setState}
+                  setAutoLogout={setAutoLogout}
+                />
+              }
+            />
             <Route path="*" element={<Navigate replace to="/home" />} />
           </Routes>
         </BrowserRouter>
