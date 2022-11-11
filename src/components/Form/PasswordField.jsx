@@ -36,7 +36,7 @@ export const PasswordField = React.forwardRef((props, ref) => {
           />
         </InputRightElement>
         <Input
-          id="password"
+          id={props.title}
           ref={mergeRef}
           name="password"
           type={isOpen ? "text" : "password"}

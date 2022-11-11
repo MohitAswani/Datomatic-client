@@ -64,7 +64,7 @@ const App = () => {
     return (
       <Fragment>
         <chakra.header>
-          <Navbar logoutHandler={logoutHandler}/>
+          <Navbar logoutHandler={logoutHandler} />
         </chakra.header>
 
         <BrowserRouter>
@@ -92,7 +92,17 @@ const App = () => {
               />
             }
           />
-          <Route path="/signup" exact element={<SignUp />} />
+          <Route
+            path="/signup"
+            exact
+            element={
+              <SignUp
+                state={state}
+                setState={setState}
+                setAutoLogout={setAutoLogout}
+              />
+            }
+          />
           <Route path="*" element={<Navigate replace to="/login" />} />
         </Routes>
       </BrowserRouter>

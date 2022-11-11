@@ -54,7 +54,7 @@ const Navbar=({logoutHandler})=>{
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-          <Logo  width="24px" height="24px" justify={{ base: "center", md: "start" }}/>
+          <Logo  width="32px" height="32px" justify={"center"}/>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
             <DesktopNav />

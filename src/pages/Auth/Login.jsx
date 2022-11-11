@@ -16,7 +16,7 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
-import * as React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "../../components/Image/Logo";
 import { PasswordField } from "../../components/Form/PasswordField";
@@ -26,10 +26,11 @@ export const Login = ({ state, setState, setAutoLogout }) => {
   const navigate = useNavigate();
 
   // useState
-  const [usernameInput, setUsernameInput] = React.useState("");
-  const [passwordInput, setPasswordInput] = React.useState("");
-  const [rememberMe, setRememberMe] = React.useState(false);
-  const [loginError, setLoginError] = React.useState("");
+  const [usernameInput, setUsernameInput] = useState("");
+  const [passwordInput, setPasswordInput] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const [loginInfo, setLoginInfo] = useState("");
 
   const usernameChangeHandler = (event) => {
     setUsernameInput(event.target.value);
@@ -46,17 +47,13 @@ export const Login = ({ state, setState, setAutoLogout }) => {
   const signInOnSubmitHandler = async (event) => {
     event.preventDefault();
 
+    try {
+    } catch (err) {}
+
     setState({
       ...state,
       authLoading: true,
     });
-
-    console.log(
-      JSON.stringify({
-        username: usernameInput,
-        password: passwordInput,
-      })
-    );
 
     const res = await fetch("http://localhost:5000/auth/login", {
       method: "POST",
@@ -69,18 +66,28 @@ export const Login = ({ state, setState, setAutoLogout }) => {
       }),
     });
 
+    const resData = await res.json();
+
     if (res.status === 422) {
-      setLoginError("Validation failed.");
-      throw new Error("Validation failed.");
+      setLoginError(resData.message || "Invalid username or password");
+      setState({
+        ...state,
+        authLoading: false,
+      });
+      return;
     }
     if (res.status !== 200 && res.status !== 201) {
-      setLoginError("Could not authenticate you!");
-      throw new Error("Could not authenticate you!");
+      setLoginError(resData.message || "Something went wrong");
+      setState({
+        ...state,
+        authLoading: false,
+      });
+      return;
     }
 
     setLoginError("");
 
-    const resData = await res.json();
+    setLoginInfo("Login successful!");
 
     setState({
       ...state,
@@ -90,16 +97,17 @@ export const Login = ({ state, setState, setAutoLogout }) => {
       userId: resData.userId,
     });
 
-    localStorage.setItem("token", resData.token);
-    localStorage.setItem("userId", resData.userId);
+    if (rememberMe) {
+      localStorage.setItem("token", resData.token);
+      localStorage.setItem("userId", resData.userId);
 
-    const remainingMilliseconds = 60 * 60 * 1000;
+      const remainingMilliseconds = 60 * 60 * 1000;
+      const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
 
-    const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+      localStorage.setItem("expiryDate", expiryDate.toISOString());
 
-    localStorage.setItem("expiryDate", expiryDate.toISOString());
-
-    setAutoLogout(remainingMilliseconds);
+      setAutoLogout(remainingMilliseconds);
+    }
 
     navigate("/home");
   };
@@ -125,7 +133,7 @@ export const Login = ({ state, setState, setAutoLogout }) => {
           <HStack justify="center">
             <Logo width="48px" height="48px" />
           </HStack>
-          
+
           <Stack
             spacing={{
               base: "2",
@@ -206,6 +214,15 @@ export const Login = ({ state, setState, setAutoLogout }) => {
                 <Alert status="error">
                   <AlertIcon />
                   {loginError}
+                </Alert>
+              </Stack>
+            )}
+
+            {loginInfo && (
+              <Stack spacing="2">
+                <Alert status="success">
+                  <AlertIcon />
+                  {loginInfo}
                 </Alert>
               </Stack>
             )}
