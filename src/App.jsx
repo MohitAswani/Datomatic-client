@@ -7,6 +7,7 @@ import SignUp from "./pages/Auth/Signup";
 import Navbar from "./components/Navbar/Navbar";
 import CreatePrescription from "./pages/Home/CreatePrescription";
 import Home from "./pages/Home/Home";
+import CreatePrescription2 from "./pages/Home/CreatePrescription2";
 
 const App = () => {
   const [state, setState] = useState({
@@ -73,6 +74,7 @@ const App = () => {
             <Routes>
               <Route path="/home" element={<Home />} />
               <Route path="/create" exact element={<CreatePrescription />} />
+              <Route path='/create2' element={<CreatePrescription2 />} />
             </Routes>
           </Fragment>
         ) : (
