@@ -1,12 +1,12 @@
 # EMIDS-client
 
-* First run the server from : ```https://github.com/MohitAswani/EMIDS-server``` 
+* GIT clone the repo from : ```https://github.com/MohitAswani/EMIDS-server``` 
 
 * To install the dependencies run : ```npm i``` 
 
 * To run the server : ```npm start```
 
-* Then start the client from : ```https://github.com/MohitAswani/EMIDS-client```
+* GIT clone the repo from : ```https://github.com/MohitAswani/EMIDS-client```
 
 * To install the dependencies run : ```npm i```
 
