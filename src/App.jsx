@@ -1,13 +1,19 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import { chakra } from "@chakra-ui/react";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useNavigate,
+  Link,
+} from "react-router-dom";
+import { chakra, Button, Stack } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/Signup";
 import Navbar from "./components/Navbar/Navbar";
 import CreatePrescription from "./pages/Home/CreatePrescription";
 import Home from "./pages/Home/Home";
-import CreatePrescription2 from "./pages/Home/CreatePrescription2";
 
 const App = () => {
   const [state, setState] = useState({
@@ -68,13 +74,36 @@ const App = () => {
       <BrowserRouter>
         {state.isAuth ? (
           <Fragment>
-            <chakra.header>
-              <Navbar logoutHandler={logoutHandler} />
-            </chakra.header>
             <Routes>
-              <Route path="/home" element={<Home />} />
-              <Route path="/create" exact element={<CreatePrescription />} />
-              <Route path='/create2' element={<CreatePrescription2 />} />
+              <Route
+                path="/create-prescription"
+                element={<CreatePrescription />}
+              />
+              <Route
+                element={
+                  <Fragment>
+                    <chakra.header>
+                      <Navbar logoutHandler={logoutHandler} />
+                    </chakra.header>
+                    <Stack
+                      direction="row"
+                      spacing={4}
+                      position={"absolute"}
+                      bottom={"5%"}
+                      right={"2%"}
+                    >
+                      <Link as={Link} to="/create-prescription">
+                        <Button leftIcon={<AddIcon />} variant="primary">
+                          Create Prescription
+                        </Button>
+                      </Link>
+                    </Stack>
+                    <chakra.footer></chakra.footer>
+                  </Fragment>
+                }
+              >
+                <Route path="/home" element={<Home />} />
+              </Route>
             </Routes>
           </Fragment>
         ) : (

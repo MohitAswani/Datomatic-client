@@ -47,9 +47,6 @@ export const Login = ({ state, setState, setAutoLogout }) => {
   const signInOnSubmitHandler = async (event) => {
     event.preventDefault();
 
-    try {
-    } catch (err) {}
-
     setState({
       ...state,
       authLoading: true,
@@ -101,7 +98,7 @@ export const Login = ({ state, setState, setAutoLogout }) => {
       localStorage.setItem("token", resData.token);
       localStorage.setItem("userId", resData.userId);
 
-      const remainingMilliseconds = 60 * 60 * 1000;
+      const remainingMilliseconds = 10 * 60 * 60 * 1000;
       const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
 
       localStorage.setItem("expiryDate", expiryDate.toISOString());

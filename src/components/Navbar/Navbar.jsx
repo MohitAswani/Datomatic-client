@@ -239,6 +239,9 @@ const MobileNavItem = ({ label, children, href }) => {
 };
 
 const NAV_ITEMS = [
+]
+
+const DUMMY_NAV_ITEMS = [
   {
     label: "Inspiration",
     children: [
