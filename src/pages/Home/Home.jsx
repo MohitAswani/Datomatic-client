@@ -196,7 +196,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
   const [scrollBehavior, setScrollBehavior] = React.useState("inside");
   const btnRef = React.useRef(null);
   return (
-    <Fragment>
+    <Flex flexWrap={"wrap"}>
       {prescriptions.length !== 0 &&
         prescriptions.map((prescription, index) => {
           return (
@@ -340,7 +340,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
           </Modal.Footer>
         </Modal.Body>
       </Modal>
-    </Fragment>
+    </Flex>
   );
 };
 

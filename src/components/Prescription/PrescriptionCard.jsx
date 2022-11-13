@@ -34,9 +34,11 @@ const PrescriptionCard = ({ name, date, onOpen, id, onClickPrescriptionHandler }
         // ref={btnRef}
         bgColor={"#cdf6f6"}
         width="500px"
+        height="225px"
         p="4"
         boxShadow="lg"
         m="4"
+        justifyContent={"space-between"}
         flexDirection={"column"}
         borderWidth="1px"
         borderRadius="lg"
@@ -50,7 +52,7 @@ const PrescriptionCard = ({ name, date, onOpen, id, onClickPrescriptionHandler }
             {name}
           </Heading>
         </Flex>
-        <Flex alignContent={"flex-end"} width="full">
+        <Flex alignContent={"flex-end"} width="full" bottom={"0px"}>
           <div style={{ display: "flex", flexGrow: "2" }}></div>
           <Text fontWeight={"light"} fontSize={"20px"}>
             {date}
