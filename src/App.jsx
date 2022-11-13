@@ -14,20 +14,25 @@ import SignUp from "./pages/Auth/Signup";
 import Navbar from "./components/Navbar/Navbar";
 import CreatePrescription from "./pages/Home/CreatePrescription";
 import Home from "./pages/Home/Home";
+import "./App.css";
+import PrivateRoutes from "./components/Navigation/PrivateRoutes";
+import HomeWrapper from "./components/Layout/HomeWrapper";
 
 const App = () => {
   const [state, setState] = useState({
     isAuth: false,
     token: null,
     userId: null,
-    authLoading: false,
+    authLoading: true,
     error: null,
     theme: "light",
+    userType: null,
   });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const expiryDate = localStorage.getItem("expiryDate");
+    const userType = localStorage.getItem("userType");
 
     if (!token && !expiryDate) {
       return;
@@ -41,12 +46,20 @@ const App = () => {
     const userId = localStorage.getItem("userId");
     const remainingMilliseconds =
       new Date(expiryDate).getTime() - new Date().getTime();
+
+    console.log(state);
     setState({
       ...state,
       isAuth: true,
       token: token,
       userId: userId,
+      userType: userType,
     });
+
+    setState((prevState) => ({
+      ...prevState,
+      authLoading: false,
+    }));
     setAutoLogout(remainingMilliseconds);
   }, []);
 
@@ -61,6 +74,7 @@ const App = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("expiryDate");
+    localStorage.removeItem("userType");
   };
 
   const setAutoLogout = (milliseconds) => {
@@ -70,72 +84,67 @@ const App = () => {
   };
 
   return (
-    <Fragment>
-      <BrowserRouter>
-        {state.isAuth ? (
-          <Fragment>
-            <Routes>
-              <Route
-                path="/create-prescription"
-                element={<CreatePrescription />}
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/login"
+          exact
+          element={
+            <Login
+              state={state}
+              setState={setState}
+              setAutoLogout={setAutoLogout}
+            />
+          }
+        />
+        <Route
+          path="/signup"
+          exact
+          element={
+            <SignUp
+              state={state}
+              setState={setState}
+              setAutoLogout={setAutoLogout}
+            />
+          }
+        />
+        <Route
+          element={
+            <PrivateRoutes
+              isAuth={state.isAuth}
+              AuthLoading={state.authLoading}
+            />
+          }
+        >
+          {/* <HomeWrapper state={state} logoutHandler={logoutHandler}> */}
+          <Route
+            path="/home"
+            exact
+            element={
+              <HomeWrapper state={state} logoutHandler={logoutHandler}>
+                <Home
+                  state={state}
+                  setState={setState}
+                  setAutoLogout={setAutoLogout}
+                />
+              </HomeWrapper>
+            }
+          />
+          {/* </HomeWrapper> */}
+          <Route
+            path="/create-prescription"
+            exact
+            element={
+              <CreatePrescription
+                state={state}
+                setState={setState}
+                setAutoLogout={setAutoLogout}
               />
-              <Route
-                element={
-                  <Fragment>
-                    <chakra.header>
-                      <Navbar logoutHandler={logoutHandler} />
-                    </chakra.header>
-                    <Stack
-                      direction="row"
-                      spacing={4}
-                      position={"absolute"}
-                      bottom={"5%"}
-                      right={"2%"}
-                    >
-                      <Link as={Link} to="/create-prescription">
-                        <Button leftIcon={<AddIcon />} variant="primary">
-                          Create Prescription
-                        </Button>
-                      </Link>
-                    </Stack>
-                    <chakra.footer></chakra.footer>
-                  </Fragment>
-                }
-              >
-                <Route path="/home" element={<Home />} />
-              </Route>
-            </Routes>
-          </Fragment>
-        ) : (
-          <Fragment>
-            <Routes>
-              <Route
-                path="/login"
-                exact
-                element={
-                  <Login
-                    state={state}
-                    setState={setState}
-                    setAutoLogout={setAutoLogout}
-                  />
-                }
-              />
-              <Route
-                path="/signup"
-                exact
-                element={
-                  <SignUp
-                    state={state}
-                    setState={setState}
-                    setAutoLogout={setAutoLogout}
-                  />
-                }
-              />
-            </Routes>
-          </Fragment>
-        )}
-      </BrowserRouter>
-    </Fragment>
+            }
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 

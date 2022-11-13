@@ -13,6 +13,8 @@ import {
   Text,
   Alert,
   AlertIcon,
+  Radio,
+  RadioGroup,
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -27,13 +29,21 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
 
   // useStates
   const [usernameInput, setUsernameInput] = useState("");
+  const [phoneNumberInput, setPhoneNumberInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState("");
   const [signUpError, setSignUpError] = useState("");
   const [signUpInfo, setSignUpInfo] = useState("");
+  const [userType, setUserType] = useState("patient");
+  const [hospitalName, setHospitalName] = useState("");
+  const [pharmacyName, setPharmacyName] = useState("");
 
   const usernameChangeHandler = (event) => {
     setUsernameInput(event.target.value);
+  };
+
+  const phoneNumberChangeHandler = (event) => {
+    setPhoneNumberInput(event.target.value);
   };
 
   const passwordChangeHandler = (event) => {
@@ -59,19 +69,19 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
       },
       body: JSON.stringify({
         username: usernameInput,
+        phoneNumber: phoneNumberInput,
         password: passwordInput,
         confirmPassword: confirmPasswordInput,
+        userType: userType,
+        hospitalName: hospitalName,
+        pharmacyName: pharmacyName,
       }),
     });
 
     const resData = await res.json();
 
-    console.log(resData);
-
     if (res.status === 422) {
-      setSignUpError(
-        resData.message || "Validation failed. Please try again."
-      );
+      setSignUpError(resData.message || "Validation failed. Please try again.");
       setState({
         ...state,
         authLoading: false,
@@ -91,8 +101,12 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
     setSignUpError("");
     setSignUpInfo("User created successfully!");
     setUsernameInput("");
+    setPhoneNumberInput("");
     setPasswordInput("");
     setConfirmPasswordInput("");
+    setUserType("patient");
+    setHospitalName("");
+    setPharmacyName("");
 
     setState({
       ...state,
@@ -102,7 +116,7 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
   };
 
   const loginLinkHandler = () => {
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -182,6 +196,15 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
                   onChange={usernameChangeHandler}
                 />
               </FormControl>
+              <FormControl>
+                <FormLabel htmlFor="phonenumber">Phone number</FormLabel>
+                <Input
+                  id="phoneNumber"
+                  type="tel"
+                  value={phoneNumberInput}
+                  onChange={phoneNumberChangeHandler}
+                />
+              </FormControl>
               <PasswordField
                 title="Password"
                 value={passwordInput}
@@ -192,6 +215,46 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
                 value={confirmPasswordInput}
                 onChange={confirmPasswordChangeHandler}
               />
+              <RadioGroup
+                spacing={6}
+                defaultValue="patient"
+                value={userType}
+                onChange={(e) => {
+                  setUserType(e);
+                }}
+              >
+                <Stack direction="row">
+                  <Radio value="patient">Patient</Radio>
+                  <Radio value="doctor">Doctor</Radio>
+                  <Radio value="pharmacy">Pharmacy</Radio>
+                </Stack>
+              </RadioGroup>
+              {userType === "doctor" && (
+                <FormControl>
+                  <FormLabel htmlFor="hospitalname">Hospital name</FormLabel>
+                  <Input
+                    id="hospitalName"
+                    type="text"
+                    value={hospitalName}
+                    onChange={(e) => {
+                      setHospitalName(e.target.value);
+                    }}
+                  />
+                </FormControl>
+              )}
+              {userType === "pharmacy" && (
+                <FormControl>
+                  <FormLabel htmlFor="pharmacyname">Pharmacy name</FormLabel>
+                  <Input
+                    id="pharmacyName"
+                    type="text"
+                    value={pharmacyName}
+                    onChange={(e) => {
+                      setPharmacyName(e.target.value);
+                    }}
+                  />
+                </FormControl>
+              )}
             </Stack>
 
             {signUpError && (

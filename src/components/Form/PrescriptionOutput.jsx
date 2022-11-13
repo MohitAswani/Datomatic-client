@@ -35,12 +35,14 @@ const PrescriptionOutput = ({
   patientAge,
   patientGender,
   patientPhNumber,
+  remarks,
   medicineList,
   setPatientName,
   setPatientAge,
   setPatientGender,
   setPatientPhNumber,
   setMedicineList,
+  setRemarks,
 }) => {
   // const [patientName, setPatientName] = useState("");
   // const [patientAge, setPatientAge] = useState("");
@@ -50,9 +52,10 @@ const PrescriptionOutput = ({
 
   return (
       <div
+      className="prescriptionOutputMainView"
         style={{
           width: "50%",
-          height: "100vh",
+          height: "90vh",
           overflowY: "auto",
           overflowX: "hidden",
           padding: "2%",
@@ -111,7 +114,6 @@ const PrescriptionOutput = ({
               placeholder="Gender"
               background={"white"}
               value={patientGender}
-              defaultValue={patientGender}
               onChange={(e) => setPatientGender(e.target.value)}
               bgColor="#f5f5f5"
             >
@@ -121,6 +123,16 @@ const PrescriptionOutput = ({
             </Select>
           </FormControl>
         </Flex>
+        <FormControl mt="5%" mr="5%">
+            <FormLabel htmlFor="age" fontWeight={"normal"}>
+              Description/Instruction
+            </FormLabel>
+            <Textarea id="age" placeholder="Description/Instruction" value={remarks} onChange={(e)=>{
+              setRemarks(e.target.value)
+            }}
+            bgColor="#f5f5f5"
+            />
+          </FormControl>
 
         <TableContainer>
           <Table mt="5%" size="sm" h="full" bg="">
@@ -146,7 +158,7 @@ const PrescriptionOutput = ({
             <Tbody>
               {medicineList &&
                 medicineList.map((medicine, index) => (
-                  <MedicinalRow medicineInfo={medicine} key={index} />
+                  <MedicinalRow medicineInfo={medicine} key={index} readOnly={false} />
                 ))}
             </Tbody>
           </Table>

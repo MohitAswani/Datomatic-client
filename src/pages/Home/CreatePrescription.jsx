@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Progress,
   Box,
@@ -20,120 +21,89 @@ import {
   Container,
   VStack,
 } from "@chakra-ui/react";
-
-import { useToast } from "@chakra-ui/react";
 import PrescriptionInput from "../../components/Form/PrescriptionInput";
 import PrescriptionOutput from "../../components/Form/PrescriptionOutput";
 
-const CreatePrescription = () => {
-  const [patientName, setPatientName] = useState(null);
-  const [patientAge, setPatientAge] = useState(null);
+const CreatePrescription = ({ state, setState, setAutoLogout }) => {
+  // useNavigate
+  const navigate = useNavigate();
+
+  const [patientName, setPatientName] = useState("");
+  const [patientAge, setPatientAge] = useState("");
   const [patientGender, setPatientGender] = useState("male");
-  const [patientPhNumber, setPatientPhNumber] = useState(null);
-  const [medicineList, setMedicineList] = useState([
-    // {
-    //     RxNORMcode: "",
-    //     medicineName: "",
-    //     dosage: "",
-    //     route: "",
-    //     frequency: "",
-    // },
-    // {
-    //     RxNORMcode: "",
-    //     medicineName: "",
-    //     dosage: "",
-    //     route: "",
-    //     frequency: "",
-    // },
-    // {
-    //     RxNORMcode: "",
-    //     medicineName: "",
-    //     dosage: "",
-    //     route: "",
-    //     frequency: "",
-    // },
-    // {
-    //     RxNORMcode: "",
-    //     medicineName: "",
-    //     dosage: "",
-    //     route: "",
-    //     frequency: "",
-    // },
-    // {
-    //     RxNORMcode: "",
-    //     medicineName: "",
-    //     dosage: "",
-    //     route: "",
-    //     frequency: "",
-    // },
-    // {
-    //     RxNORMcode: "",
-    //     medicineName: "",
-    //     dosage: "",
-    //     route: "",
-    //     frequency: "",
-    // },
-    // {
-    //     RxNORMcode: "",
-    //     medicineName: "",
-    //     dosage: "",
-    //     route: "",
-    //     frequency: "",
-    // },
-    // {
-    //     RxNORMcode: "",
-    //     medicineName: "",
-    //     dosage: "",
-    //     route: "",
-    //     frequency: "",
-    // },
-    // {
-    //     RxNORMcode: "",
-    //     medicineName: "",
-    //     dosage: "",
-    //     route: "",
-    //     frequency: "",
-    // },
-    // {
-    //     RxNORMcode: "",
-    //     medicineName: "",
-    //     dosage: "",
-    //     route: "",
-    //     frequency: "",
-    // },
-    // {
-    //     RxNORMcode: "",
-    //     medicineName: "",
-    //     dosage: "",
-    //     route: "",
-    //     frequency: "",
-    // }
-  ]);
+  const [patientPhNumber, setPatientPhNumber] = useState("");
+  const [medicineList, setMedicineList] = useState([]);
+  const [remarks, setRemarks] = useState("");
+  const [prescriptionError, setPrescriptionError] = useState("");
+
+  const submitButtonHandler = async (event) => {
+    event.preventDefault();
+
+    const res = await fetch("http://localhost:5000/data/save-prescription", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + state.token,
+      },
+      body: JSON.stringify({
+        patientName: patientName,
+        patientPhoneNumber: patientPhNumber,
+        patientAge: patientAge,
+        patientGender: patientGender,
+        patientMedications: medicineList,
+        patientRemarks: remarks,
+        doctorId: state.userId,
+      }),
+    });
+
+    const resData = await res.json();
+
+    if (res.status === 401) {
+      setPrescriptionError(resData.message || "Authorization failed");
+      return;
+    }
+
+    if (res.status === 422) {
+      setPrescriptionError(resData.message || "Validation failed");
+      return;
+    }
+
+    if (res.status !== 200 && res.status !== 201) {
+      setPrescriptionError(resData.message || "Saving prescription failed.");
+      return;
+    }
+
+    setPrescriptionError("");
+
+    navigate("/home");
+  };
 
   return (
-    <Container px={0} m={0} bgColor='#f5f5f5'>
-      <Flex h="100vh" w="100vw">
-        <PrescriptionInput 
-            setPatientName={setPatientName}
-            setPatientAge={setPatientAge}
-            setPatientGender={setPatientGender}
-            setPatientPhNumber={setPatientPhNumber}
-            setMedicineList={setMedicineList}
-        />
-        <PrescriptionOutput 
-            patientName={patientName}
-            patientAge={patientAge}
-            patientGender={patientGender}
-            patientPhNumber={patientPhNumber}
-            medicineList={medicineList}
-            setPatientName={setPatientName}
-            setPatientAge={setPatientAge}
-            setPatientGender={setPatientGender}
-            setPatientPhNumber={setPatientPhNumber}
-            setMedicineList={setMedicineList}
-        />
-      </Flex>
-    </Container>
+    <Flex h="100%" w="100%">
+      <PrescriptionInput
+        setPatientName={setPatientName}
+        setPatientAge={setPatientAge}
+        setPatientGender={setPatientGender}
+        setPatientPhNumber={setPatientPhNumber}
+        setMedicineList={setMedicineList}
+        setRemarks={setRemarks}
+        submitButtonHandler={submitButtonHandler}
+      />
+      <PrescriptionOutput
+        patientName={patientName}
+        patientAge={patientAge}
+        patientGender={patientGender}
+        patientPhNumber={patientPhNumber}
+        remarks={remarks}
+        medicineList={medicineList}
+        setPatientName={setPatientName}
+        setPatientAge={setPatientAge}
+        setPatientGender={setPatientGender}
+        setPatientPhNumber={setPatientPhNumber}
+        setRemarks={setRemarks}
+        setMedicineList={setMedicineList}
+      />
+    </Flex>
   );
 };
 

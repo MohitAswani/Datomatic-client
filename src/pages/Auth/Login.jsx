@@ -26,14 +26,14 @@ export const Login = ({ state, setState, setAutoLogout }) => {
   const navigate = useNavigate();
 
   // useState
-  const [usernameInput, setUsernameInput] = useState("");
+  const [phoneNumberInput, setPhoneNumberInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [loginInfo, setLoginInfo] = useState("");
 
-  const usernameChangeHandler = (event) => {
-    setUsernameInput(event.target.value);
+  const phoneNumberChangeHandler = (event) => {
+    setPhoneNumberInput(event.target.value);
   };
 
   const passwordChangeHandler = (event) => {
@@ -58,7 +58,7 @@ export const Login = ({ state, setState, setAutoLogout }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: usernameInput,
+        phoneNumber: phoneNumberInput,
         password: passwordInput,
       }),
     });
@@ -66,7 +66,7 @@ export const Login = ({ state, setState, setAutoLogout }) => {
     const resData = await res.json();
 
     if (res.status === 422) {
-      setLoginError(resData.message || "Invalid username or password");
+      setLoginError(resData.message || "Invalid phone number or password");
       setState({
         ...state,
         authLoading: false,
@@ -86,17 +86,21 @@ export const Login = ({ state, setState, setAutoLogout }) => {
 
     setLoginInfo("Login successful!");
 
+    console.log(resData);
+
     setState({
       ...state,
       isAuth: true,
       token: resData.token,
       authLoading: false,
       userId: resData.userId,
+      userType: resData.userType,
     });
 
     if (rememberMe) {
       localStorage.setItem("token", resData.token);
       localStorage.setItem("userId", resData.userId);
+      localStorage.setItem("userType", resData.userType);
 
       const remainingMilliseconds = 10 * 60 * 60 * 1000;
       const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
@@ -183,12 +187,12 @@ export const Login = ({ state, setState, setAutoLogout }) => {
           <Stack spacing="6">
             <Stack spacing="5">
               <FormControl>
-                <FormLabel htmlFor="username">Username</FormLabel>
+                <FormLabel htmlFor="phonenumber">Phone number</FormLabel>
                 <Input
-                  id="username"
-                  type="text"
-                  value={usernameInput}
-                  onChange={usernameChangeHandler}
+                  id="phoneNumber"
+                  type="tel"
+                  value={phoneNumberInput}
+                  onChange={phoneNumberChangeHandler}
                 />
               </FormControl>
               <PasswordField

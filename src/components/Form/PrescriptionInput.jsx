@@ -7,14 +7,17 @@ import {
   Heading,
   Text,
   VStack,
+  IconButton
 } from "@chakra-ui/react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
+import useKeypress from "react-use-keypress";
+import { ArrowForwardIcon, ArrowBackIcon, DeleteIcon} from '@chakra-ui/icons'
 
 const Form1 = () => {
   return (
     <FormControl>
       <VStack spacing={0} alignItems="flex-start">
-        <Heading size="md">Patient's Name</Heading>
+        <Heading size="md">Patient's Name</Heading>react-use-keypress
         <Text>Write patient's name in Textarea below</Text>
       </VStack>
     </FormControl>
@@ -55,6 +58,18 @@ const Form5 = () => {
   return (
     <FormControl>
       <VStack spacing={0} alignItems="flex-start">
+        <Heading size="md">Description</Heading>
+        <Text>
+          Write instructions/description for patient in Textarea below
+        </Text>
+      </VStack>
+    </FormControl>
+  );
+};
+const Form6 = () => {
+  return (
+    <FormControl>
+      <VStack spacing={0} alignItems="flex-start">
         <Heading size="md">Patient's medicine</Heading>
         <Text>
           Write patient's medicine with medicine name, dosage, route and
@@ -71,6 +86,8 @@ const PrescriptionInput = ({
   setPatientGender,
   setPatientPhNumber,
   setMedicineList,
+  setRemarks,
+  submitButtonHandler,
 }) => {
   const canvas = useRef(null);
   const [error, setError] = useState(null);
@@ -123,6 +140,12 @@ const PrescriptionInput = ({
         setPatientGender("other");
       }
     }
+    if (step === 5) {
+      setRemarks(resData.data);
+    }
+    if (step === 6) {
+      setMedicineList(resData.data);
+    }
   };
 
   const exportMedicationImage = async () => {
@@ -149,28 +172,46 @@ const PrescriptionInput = ({
     setMedicineList((prev) => [...prev, resData.data]);
   };
 
+  const submitOnEnter = (e) => {
+    useKeypress("Enter", () => {
+      submitButtonHandler(e);
+    });
+  };
+
   const styles = {
     border: "0.0625rem solid #9c9c9c",
   };
 
+  const canvasUndo = () => {
+    canvas.current.undo();
+  };
+
+  const canvasRedo = () => {
+    canvas.current.redo();
+  };
+
+  const canvasClear = () => {
+    canvas.current.clearCanvas();
+  };
+
+
   return (
-    <div style={{
+    <div
+      style={{
         width: "50%",
         height: "80%",
         padding: "2%",
-        borderRadius:"8px",
-      }}>
+        borderRadius: "8px",
+      }}
+    >
       <VStack
         spacing={10}
-        w="full"
-        h="full"
         p={5}
-        paddingTop={2}
-        paddingBottom={2}
+        paddingTop={5}
+        paddingBottom={5}
         alignItems="flex-start"
         boxShadow="md"
-        borderRadius={'8px'}
-        height={"100vh"}
+        borderRadius={"8px"}
         bgColor={"white"}
       >
         {step === 1 ? (
@@ -181,10 +222,13 @@ const PrescriptionInput = ({
           <Form3 />
         ) : step === 4 ? (
           <Form4 />
-        ) : (
+        ) : step === 5 ? (
           <Form5 />
-        )}
-        <VStack spacing={0} w="100%" h="500px" alignItems="flex-start">
+        ) : step === 6 ? (
+          <Form6 />
+        ) : null}
+
+        <VStack spacing={2} w="100%" h="500px" alignItems="flex-start">
           <ReactSketchCanvas
             ref={canvas}
             style={styles}
@@ -193,6 +237,34 @@ const PrescriptionInput = ({
             strokeWidth={4}
             strokeColor="black"
           />
+          <Flex alignContent={'flex-start'} width='100%'>
+            <IconButton
+             variant="outline"
+              aria-label="Call Segun"
+              size="lg"
+              icon={<ArrowBackIcon />}
+              onClick={canvasUndo}
+              mr={2}
+            />
+            <IconButton
+              variant="outline"
+              aria-label="Call Segun"
+              size="lg"
+              icon={<ArrowForwardIcon />}
+              onClick={canvasRedo}
+              mr={2}
+              ml={2}
+            />
+            <IconButton
+               variant="outline"
+              aria-label="Call Segun"
+              size="lg"
+              icon={<DeleteIcon />}
+              onClick={canvasClear}
+              mr={2}
+              ml={2}
+            />
+          </Flex>
         </VStack>
         <ButtonGroup mt="5%" w="100%">
           <Flex w="100%" justifyContent="space-between">
@@ -208,16 +280,40 @@ const PrescriptionInput = ({
               >
                 Back
               </Button>
-              <Button
-                onClick={() => {
-                  step <= 4 ? exportImage() : exportMedicationImage();
-                  setStep(step + 1);
-                }}
-                w="7rem"
-                variant="primary"
-              >
-                Next
-              </Button>
+              {step === 6 && (
+                <Button
+                  onClick={() => {
+                    exportMedicationImage();
+                  }}
+                  w="10rem"
+                  mr="5%"
+                  variant="primary"
+                >
+                  Add Medicine
+                </Button>
+              )}
+              {step <= 5 ? (
+                <Button
+                  onClick={() => {
+                    step <= 5 ? exportImage() : exportMedicationImage();
+                    setStep(step + 1);
+                  }}
+                  w="7rem"
+                  variant="primary"
+                >
+                  Next
+                </Button>
+              ) : (
+                <Button
+                  onClick={(e) => {
+                    submitButtonHandler(e);
+                  }}
+                  w="7rem"
+                   variant="primary"
+                 >
+                  Save
+                </Button>
+              )}
             </Flex>
           </Flex>
         </ButtonGroup>
