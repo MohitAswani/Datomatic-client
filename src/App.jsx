@@ -1,10 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react";
 import {
   BrowserRouter,
-  Route,
+  Route, 
   Routes,
   useNavigate,
   Link,
+  Navigate,
 } from "react-router-dom";
 import { chakra, Button, Stack } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
@@ -143,6 +144,9 @@ const App = () => {
             }
           />
         </Route>
+        <Route path="*" element={
+          <Navigate to={'/login'}/>
+        }/>
       </Routes>
     </BrowserRouter>
   );
