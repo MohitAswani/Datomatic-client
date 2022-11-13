@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Progress,
@@ -77,6 +77,17 @@ const CreatePrescription = ({ state, setState, setAutoLogout }) => {
 
     navigate("/home");
   };
+
+  useEffect(()=>{
+    const list=window.addEventListener('keypress',(event)=>{
+      if(event.key==='Enter'){
+        console.log()
+        event.preventDefault();
+      }
+    })
+
+    return _=>window.removeEventListener('keypress',list)
+  },[]);
 
   return (
     <Flex h="100%" w="100%">
