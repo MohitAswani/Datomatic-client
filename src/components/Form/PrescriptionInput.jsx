@@ -97,7 +97,7 @@ const PrescriptionInput = ({
     const dataURL = await canvas.current.exportImage("jpeg");
     const clearCanvas = canvas.current.clearCanvas();
 
-    const res = await fetch("http://localhost:5000/scan", {
+    const res = await fetch("https://emids-server.herokuapp.com/scan", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -152,7 +152,7 @@ const PrescriptionInput = ({
     const dataURL = await canvas.current.exportImage("jpeg");
     const clearCanvas = canvas.current.clearCanvas();
 
-    const res = await fetch("http://localhost:5000/scan-med", {
+    const res = await fetch("https://emids-server.herokuapp.com/scan-med", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

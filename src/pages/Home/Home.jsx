@@ -50,7 +50,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
   }, []);
 
   const getUsername = async () => {
-    const res = await fetch("http://localhost:5000/data/username", {
+    const res = await fetch("https://emids-server.herokuapp.com/data/username", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
   const getPrescriptions = async () => {
     if (state.userType === "patient") {
       const res = await fetch(
-        "http://localhost:5000/data/patient-prescriptions",
+        "https://emids-server.herokuapp.com/data/patient-prescriptions",
         {
           method: "GET",
           headers: {
@@ -111,7 +111,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
       setPrescriptions(resData.prescriptions);
     } else if (state.userType === "doctor") {
       const res = await fetch(
-        "http://localhost:5000/data/doctor-prescriptions",
+        "https://emids-server.herokuapp.com/data/doctor-prescriptions",
         {
           method: "GET",
           headers: {
@@ -146,7 +146,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
   const onClickPrescriptionHandler = async (id) => {
 
     const res = await fetch(
-      "http://localhost:5000/data/prescription/" + id,
+      "https://emids-server.herokuapp.com/data/prescription/" + id,
       {
         method: "GET",
         headers: {

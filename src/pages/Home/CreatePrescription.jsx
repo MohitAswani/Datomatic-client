@@ -39,7 +39,7 @@ const CreatePrescription = ({ state, setState, setAutoLogout }) => {
   const submitButtonHandler = async (event) => {
     event.preventDefault();
 
-    const res = await fetch("http://localhost:5000/data/save-prescription", {
+    const res = await fetch("https://emids-server.herokuapp.com/data/save-prescription", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

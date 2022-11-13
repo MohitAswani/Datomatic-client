@@ -62,7 +62,7 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
       authLoading: true,
     });
 
-    const res = await fetch("http://localhost:5000/auth/signup", {
+    const res = await fetch("https://emids-server.herokuapp.com/auth/signup", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
