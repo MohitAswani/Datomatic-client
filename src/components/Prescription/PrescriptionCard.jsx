@@ -42,6 +42,7 @@ const PrescriptionCard = ({ name, date, onOpen, id, onClickPrescriptionHandler }
         flexDirection={"column"}
         borderWidth="1px"
         borderRadius="lg"
+        cursor={"pointer"}
         bg={useColorModeValue("white", "gray.900")}
         onClick={() => {
           onClickPrescriptionHandler(id).then(()=>onOpen());

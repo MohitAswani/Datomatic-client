@@ -14,7 +14,7 @@ const HomeWrapper = ({ state,logoutHandler,children }) => {
   return (
     <Fragment>
       <chakra.header>
-        <Navbar logoutHandler={logoutHandler} />
+        <Navbar state={state} logoutHandler={logoutHandler} />
       </chakra.header>
       {state.userType === "doctor" && (
         <Stack

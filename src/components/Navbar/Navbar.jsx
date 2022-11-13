@@ -23,7 +23,7 @@ import {
 } from "@chakra-ui/icons";
 import { Logo } from "../Image/Logo";
 
-const Navbar=({logoutHandler})=>{
+const Navbar = ({ state, logoutHandler }) => {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
@@ -54,7 +54,7 @@ const Navbar=({logoutHandler})=>{
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-          <Logo  width="32px" height="32px" justify={"center"}/>
+          <Logo width="32px" height="32px" justify={"center"} />
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
             <DesktopNav />
@@ -70,7 +70,7 @@ const Navbar=({logoutHandler})=>{
           <Button
             fontSize={"sm"}
             fontWeight={400}
-            variant="primary" 
+            variant="primary"
             onClick={logoutHandler}
           >
             Logout
@@ -83,7 +83,7 @@ const Navbar=({logoutHandler})=>{
       </Collapse>
     </Box>
   );
-}
+};
 
 const DesktopNav = () => {
   const linkColor = useColorModeValue("gray.600", "gray.200");
@@ -239,7 +239,11 @@ const MobileNavItem = ({ label, children, href }) => {
 };
 
 const NAV_ITEMS = [
-]
+  {
+    label: "Your prescriptions",
+    href: "/home",
+  }
+];
 
 const DUMMY_NAV_ITEMS = [
   {
@@ -281,6 +285,5 @@ const DUMMY_NAV_ITEMS = [
     href: "#",
   },
 ];
-
 
 export default Navbar;

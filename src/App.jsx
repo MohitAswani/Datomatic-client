@@ -117,7 +117,6 @@ const App = () => {
             />
           }
         >
-          {/* <HomeWrapper state={state} logoutHandler={logoutHandler}> */}
           <Route
             path="/home"
             exact
@@ -131,7 +130,6 @@ const App = () => {
               </HomeWrapper>
             }
           />
-          {/* </HomeWrapper> */}
           <Route
             path="/create-prescription"
             exact

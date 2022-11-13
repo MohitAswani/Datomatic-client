@@ -80,6 +80,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
 
   const getPrescriptions = async () => {
     if (state.userType === "patient") {
+      console.log("patient");
       const res = await fetch(
         "https://emids-server.herokuapp.com/data/patient-prescriptions",
         {
@@ -110,6 +111,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
 
       setPrescriptions(resData.prescriptions);
     } else if (state.userType === "doctor") {
+      console.log("doctor");
       const res = await fetch(
         "https://emids-server.herokuapp.com/data/doctor-prescriptions",
         {
