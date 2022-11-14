@@ -24,7 +24,7 @@ import {
 import PrescriptionInput from "../../components/Form/PrescriptionInput";
 import PrescriptionOutput from "../../components/Form/PrescriptionOutput";
 
-const { BACKEND_URL } = process.env;
+const BACKEND_URL = import.meta.env.VITE_SERVER_URL;
 
 const CreatePrescription = ({ state, setState, setAutoLogout }) => {
   // useNavigate

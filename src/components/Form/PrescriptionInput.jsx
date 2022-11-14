@@ -13,7 +13,7 @@ import { ReactSketchCanvas } from "react-sketch-canvas";
 import useKeypress from "react-use-keypress";
 import { ArrowForwardIcon, ArrowBackIcon, DeleteIcon } from "@chakra-ui/icons";
 
-const { BACKEND_URL } = process.env;
+const BACKEND_URL = import.meta.env.VITE_SERVER_URL;
 
 const Form1 = () => {
   return (

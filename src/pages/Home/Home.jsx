@@ -34,7 +34,7 @@ import React from "react";
 import PrescriptionCard from "../../components/Prescription/PrescriptionCard";
 import MedicinalRow from "../../components/Form/MedicinalRow.jsx";
 
-const { BACKEND_URL } = process.env;
+const BACKEND_URL = import.meta.env.VITE_SERVER_URL;
 
 const Home = ({ state, setState, setAutoLogout }) => {
   const [username, setUsername] = useState("");

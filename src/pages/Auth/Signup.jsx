@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { Logo } from "../../components/Image/Logo";
 import { PasswordField } from "../../components/Form/PasswordField";
 
-const { BACKEND_URL } = process.env;
+const BACKEND_URL = import.meta.env.VITE_SERVER_URL;
 
 export const SignUp = ({ state, setState, setAutoLogout }) => {
   // useNavigate
