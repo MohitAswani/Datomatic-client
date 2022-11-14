@@ -34,6 +34,8 @@ import React from "react";
 import PrescriptionCard from "../../components/Prescription/PrescriptionCard";
 import MedicinalRow from "../../components/Form/MedicinalRow.jsx";
 
+const { BACKEND_URL } = process.env;
+
 const Home = ({ state, setState, setAutoLogout }) => {
   const [username, setUsername] = useState("");
   const [prescriptions, setPrescriptions] = useState([]);
@@ -50,7 +52,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
   }, []);
 
   const getUsername = async () => {
-    const res = await fetch("https://emids-server.herokuapp.com/data/username", {
+    const res = await fetch(`${BACKEND_URL}/data/username`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -82,7 +84,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
     if (state.userType === "patient") {
       console.log("patient");
       const res = await fetch(
-        "https://emids-server.herokuapp.com/data/patient-prescriptions",
+        `${BACKEND_URL}/data/patient-prescriptions`,
         {
           method: "GET",
           headers: {
@@ -113,7 +115,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
     } else if (state.userType === "doctor") {
       console.log("doctor");
       const res = await fetch(
-        "https://emids-server.herokuapp.com/data/doctor-prescriptions",
+        `${BACKEND_URL}/data/doctor-prescriptions`,
         {
           method: "GET",
           headers: {
@@ -148,7 +150,7 @@ const Home = ({ state, setState, setAutoLogout }) => {
   const onClickPrescriptionHandler = async (id) => {
 
     const res = await fetch(
-      "https://emids-server.herokuapp.com/data/prescription/" + id,
+      `${BACKEND_URL}/data/prescription/` + id,
       {
         method: "GET",
         headers: {

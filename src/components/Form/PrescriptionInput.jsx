@@ -7,11 +7,13 @@ import {
   Heading,
   Text,
   VStack,
-  IconButton
+  IconButton,
 } from "@chakra-ui/react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import useKeypress from "react-use-keypress";
-import { ArrowForwardIcon, ArrowBackIcon, DeleteIcon} from '@chakra-ui/icons'
+import { ArrowForwardIcon, ArrowBackIcon, DeleteIcon } from "@chakra-ui/icons";
+
+const { BACKEND_URL } = process.env;
 
 const Form1 = () => {
   return (
@@ -97,7 +99,7 @@ const PrescriptionInput = ({
     const dataURL = await canvas.current.exportImage("jpeg");
     const clearCanvas = canvas.current.clearCanvas();
 
-    const res = await fetch("https://emids-server.herokuapp.com/scan", {
+    const res = await fetch(`${BACKEND_URL}/scan`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -152,7 +154,7 @@ const PrescriptionInput = ({
     const dataURL = await canvas.current.exportImage("jpeg");
     const clearCanvas = canvas.current.clearCanvas();
 
-    const res = await fetch("https://emids-server.herokuapp.com/scan-med", {
+    const res = await fetch(`${BACKEND_URL}/scan-med`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -193,7 +195,6 @@ const PrescriptionInput = ({
   const canvasClear = () => {
     canvas.current.clearCanvas();
   };
-
 
   return (
     <div
@@ -237,9 +238,9 @@ const PrescriptionInput = ({
             strokeWidth={4}
             strokeColor="black"
           />
-          <Flex alignContent={'flex-start'} width='100%'>
+          <Flex alignContent={"flex-start"} width="100%">
             <IconButton
-             variant="outline"
+              variant="outline"
               aria-label="Call Segun"
               size="lg"
               icon={<ArrowBackIcon />}
@@ -256,7 +257,7 @@ const PrescriptionInput = ({
               ml={2}
             />
             <IconButton
-               variant="outline"
+              variant="outline"
               aria-label="Call Segun"
               size="lg"
               icon={<DeleteIcon />}
@@ -309,8 +310,8 @@ const PrescriptionInput = ({
                     submitButtonHandler(e);
                   }}
                   w="7rem"
-                   variant="primary"
-                 >
+                  variant="primary"
+                >
                   Save
                 </Button>
               )}

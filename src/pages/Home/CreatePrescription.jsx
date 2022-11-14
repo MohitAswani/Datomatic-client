@@ -24,6 +24,8 @@ import {
 import PrescriptionInput from "../../components/Form/PrescriptionInput";
 import PrescriptionOutput from "../../components/Form/PrescriptionOutput";
 
+const { BACKEND_URL } = process.env;
+
 const CreatePrescription = ({ state, setState, setAutoLogout }) => {
   // useNavigate
   const navigate = useNavigate();
@@ -39,7 +41,7 @@ const CreatePrescription = ({ state, setState, setAutoLogout }) => {
   const submitButtonHandler = async (event) => {
     event.preventDefault();
 
-    const res = await fetch("https://emids-server.herokuapp.com/data/save-prescription", {
+    const res = await fetch(`${BACKEND_URL}/data/save-prescription`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

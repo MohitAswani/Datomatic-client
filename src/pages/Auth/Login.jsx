@@ -21,6 +21,8 @@ import { useNavigate } from "react-router-dom";
 import { Logo } from "../../components/Image/Logo";
 import { PasswordField } from "../../components/Form/PasswordField";
 
+const { BACKEND_URL } = process.env;
+
 export const Login = ({ state, setState, setAutoLogout }) => {
   // useNavigate
   const navigate = useNavigate();
@@ -52,7 +54,7 @@ export const Login = ({ state, setState, setAutoLogout }) => {
       authLoading: true,
     });
 
-    const res = await fetch("https://emids-server.herokuapp.com/auth/login", {
+    const res = await fetch(`${BACKEND_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
