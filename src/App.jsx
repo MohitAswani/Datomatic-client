@@ -143,7 +143,7 @@ const App = () => {
           />
         </Route>
         <Route path="*" element={
-          <Navigate to={'/login'}/>
+          <Navigate to={'/home'}/>
         }/>
       </Routes>
     </BrowserRouter>
