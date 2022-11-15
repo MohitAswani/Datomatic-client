@@ -30,7 +30,7 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
   const navigate = useNavigate();
 
   // useStates
-  const [usernameInput, setUsernameInput] = useState("");
+  const [nameInput, setNameInput] = useState("");
   const [phoneNumberInput, setPhoneNumberInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState("");
@@ -40,8 +40,8 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
   const [hospitalName, setHospitalName] = useState("");
   const [pharmacyName, setPharmacyName] = useState("");
 
-  const usernameChangeHandler = (event) => {
-    setUsernameInput(event.target.value);
+  const nameChangeHandler = (event) => {
+    setNameInput(event.target.value);
   };
 
   const phoneNumberChangeHandler = (event) => {
@@ -64,13 +64,15 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
       authLoading: true,
     });
 
+    console.log(nameInput);
+
     const res = await fetch(`${BACKEND_URL}/auth/signup`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: usernameInput,
+        name: nameInput,
         phoneNumber: phoneNumberInput,
         password: passwordInput,
         confirmPassword: confirmPasswordInput,
@@ -83,7 +85,7 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
     const resData = await res.json();
 
     if (res.status === 422) {
-      setSignUpError(resData.message || "Validation failed. Please try again.");
+      setSignUpError(resData.data[0].msg || "Validation failed. Please try again.");
       setState({
         ...state,
         authLoading: false,
@@ -92,7 +94,7 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
     }
 
     if (res.status !== 200 && res.status !== 201) {
-      setSignUpError(resData.message || "Something went wrong.");
+      setSignUpError(resData.data[0].msg || "Something went wrong.");
       setState({
         ...state,
         authLoading: false,
@@ -102,7 +104,7 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
 
     setSignUpError("");
     setSignUpInfo("User created successfully!");
-    setUsernameInput("");
+    setNameInput("");
     setPhoneNumberInput("");
     setPasswordInput("");
     setConfirmPasswordInput("");
@@ -190,12 +192,12 @@ export const SignUp = ({ state, setState, setAutoLogout }) => {
           <Stack spacing="6">
             <Stack spacing="5">
               <FormControl>
-                <FormLabel htmlFor="username">Username</FormLabel>
+                <FormLabel htmlFor="name">Name</FormLabel>
                 <Input
-                  id="username"
+                  id="name"
                   type="text"
-                  value={usernameInput}
-                  onChange={usernameChangeHandler}
+                  value={nameInput}
+                  onChange={nameChangeHandler}
                 />
               </FormControl>
               <FormControl>

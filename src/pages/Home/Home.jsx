@@ -37,7 +37,7 @@ import MedicinalRow from "../../components/Form/MedicinalRow.jsx";
 const BACKEND_URL = import.meta.env.VITE_SERVER_URL;
 
 const Home = ({ state, setState, setAutoLogout }) => {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [prescriptions, setPrescriptions] = useState([]);
   const [patientName, setPatientName] = useState("");
   const [patientAge, setPatientAge] = useState("");
@@ -47,12 +47,12 @@ const Home = ({ state, setState, setAutoLogout }) => {
   const [remarks, setRemarks] = useState("");
 
   useEffect(() => {
-    getUsername();
+    getName();
     getPrescriptions();
   }, []);
 
-  const getUsername = async () => {
-    const res = await fetch(`${BACKEND_URL}/data/username`, {
+  const getName = async () => {
+    const res = await fetch(`${BACKEND_URL}/data/name`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -73,11 +73,11 @@ const Home = ({ state, setState, setAutoLogout }) => {
     }
 
     if (res.status !== 200 && res.status !== 201) {
-      console.log(resData.message || "Fetching username failed.");
+      console.log(resData.message || "Fetching name failed.");
       return;
     }
 
-    setUsername(resData.username);
+    setName(resData.name);
   };
 
   const getPrescriptions = async () => {
@@ -246,7 +246,6 @@ const Home = ({ state, setState, setAutoLogout }) => {
               <Input
                 id="name"
                 placeholder="Patient's Name"
-                // value={username}
                 value={patientName}
                 bgColor="#f5f5f5"
                 readOnly

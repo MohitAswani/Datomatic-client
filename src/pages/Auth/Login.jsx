@@ -68,7 +68,7 @@ export const Login = ({ state, setState, setAutoLogout }) => {
     const resData = await res.json();
 
     if (res.status === 422) {
-      setLoginError(resData.message || "Invalid phone number or password");
+      setLoginError(resData.data[0].msg || "Invalid phone number or password");
       setState({
         ...state,
         authLoading: false,
@@ -76,7 +76,7 @@ export const Login = ({ state, setState, setAutoLogout }) => {
       return;
     }
     if (res.status !== 200 && res.status !== 201) {
-      setLoginError(resData.message || "Something went wrong");
+      setLoginError(resData.data[0].msg || "Something went wrong");
       setState({
         ...state,
         authLoading: false,
