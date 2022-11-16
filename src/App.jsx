@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import {
   BrowserRouter,
-  Route, 
+  Route,
   Routes,
   useNavigate,
   Link,
@@ -31,11 +31,17 @@ const App = () => {
   });
 
   useEffect(() => {
+    
     const token = localStorage.getItem("token");
     const expiryDate = localStorage.getItem("expiryDate");
     const userType = localStorage.getItem("userType");
 
     if (!token && !expiryDate) {
+      setState({
+        ...state,
+        isAuth: false,
+        authLoading: false,
+      });
       return;
     }
 
@@ -52,6 +58,7 @@ const App = () => {
     setState({
       ...state,
       isAuth: true,
+      authLoading: false,
       token: token,
       userId: userId,
       userType: userType,
@@ -141,10 +148,9 @@ const App = () => {
               />
             }
           />
+          <Route path="*" element={<Navigate to={"/home"} />} />
         </Route>
-        <Route path="*" element={
-          <Navigate to={'/home'}/>
-        }/>
+        <Route path="*" element={<Navigate to={"/login"} />} />
       </Routes>
     </BrowserRouter>
   );

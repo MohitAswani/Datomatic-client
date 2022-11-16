@@ -67,6 +67,8 @@ export const Login = ({ state, setState, setAutoLogout }) => {
 
     const resData = await res.json();
 
+    console.log(resData);
+
     if (res.status === 422) {
       setLoginError(resData.data[0].msg || "Invalid phone number or password");
       setState({
