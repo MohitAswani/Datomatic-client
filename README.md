@@ -1,8 +1,8 @@
-# EMIDS-server
+# Datomatic-client
 
 * Live website available at : ```https://datomatic.netlify.app/```
 
-* Server available at : ```https://emids-server.herokuapp.com```
+* Server available at : ```https://emids-backend.azurewebsites.net```
 
 ## To run on local system :
 
